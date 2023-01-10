@@ -1,0 +1,13 @@
+spring:
+    application:
+        name: nextBoard
+    data:
+        mongodb:
+#            authentication-database: nextBoard
+            host: localhost
+            port: 27017
+            database: nextBoard
+server:
+    port: 8082
+
+
