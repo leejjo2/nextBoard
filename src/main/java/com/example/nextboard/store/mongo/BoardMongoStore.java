@@ -33,6 +33,23 @@ public class BoardMongoStore implements BoardStore {
     }
 
     @Override
+    public void update(Board board){
+        if(board.getId()==null){
+            return;
+        }
+        BoardDoc boardDoc = new BoardDoc(board);
+        boardMongoRepository.save(boardDoc);
+    }
+
+    @Override
+    public void delete(String id){
+        if(id == null){
+            return;
+        }
+        boardMongoRepository.deleteById(id);
+    }
+
+    @Override
     public List<Board> findAll(){
         return BoardDoc.toDomains(boardMongoRepository.findAll());
     }

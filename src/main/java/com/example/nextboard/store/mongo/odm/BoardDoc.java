@@ -26,6 +26,7 @@ public class BoardDoc {
     private long modificationTime;
     private String title;
     private String content;
+    private String photo;
 
     public BoardDoc (Board board) {
         BeanUtils.copyProperties(board, this);

@@ -17,6 +17,7 @@ public class Board {
     private long modificationTime;
     private String title;
     private String content;
+    private String photo;
 
 //    public static Board sample () {
 //        return new Board("","1", "id", "", "", "title", "content");

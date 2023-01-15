@@ -4,7 +4,6 @@ import com.example.nextboard.entity.Board;
 import com.example.nextboard.entity.sdo.BoardRdo;
 import com.example.nextboard.store.BoardStore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +35,14 @@ public class BoardImpl {
         BoardRdo boardRdo = new BoardRdo();
         boardRdo.setBoards(boardList);
         return boardRdo;
+    }
+
+    public void modifyBoard(Board board){
+//        Board postBoard = boardStore.retrieve(board.getId());
+        boardStore.update(board);
+    }
+    public void deleteBoard(String id){
+        boardStore.delete(id);
     }
 
 }
