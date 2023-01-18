@@ -1,6 +1,6 @@
-package com.example.nextboard.entity.sdo;
+package com.example.nextboard.entity.board.sdo;
 
-import com.example.nextboard.entity.Board;
+import com.example.nextboard.entity.board.Board;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

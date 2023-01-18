@@ -1,13 +1,17 @@
 package com.example.nextboard.service;
+import com.example.nextboard.entity.board.Board;
+import com.example.nextboard.entity.board.sdo.BoardRdo;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.example.nextboard.entity.Board;
-import com.example.nextboard.impl.BoardImpl;
-import org.springframework.stereotype.Service;
+public interface BoardService {
+    void newBoard(Board board, long sysTime, String originalFileName, String filePath);
 
-@Service
-public class BoardService {
+    void saveFile(MultipartFile multipartFile, String filePath);
 
-    public void newBoard (Board board) {
-        new BoardImpl().newBoard(board);
-    }
+    Board findBoardList(String id);
+
+    BoardRdo findAllBoard();
+
+    void modifyBoard(Board board);
+    void deleteBoard(String id);
 }

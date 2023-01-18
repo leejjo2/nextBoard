@@ -1,7 +1,7 @@
 package com.example.nextboard.store;
 
 
-import com.example.nextboard.entity.Board;
+import com.example.nextboard.entity.board.Board;
 
 import java.util.List;
 

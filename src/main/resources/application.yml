@@ -7,6 +7,12 @@ spring:
             host: localhost
             port: 27017
             database: nextBoard
+    servlet:
+        multipart:
+            max-file-size: 10MB
+            max-request-size: 10MB
+jwt:
+    secret: 9f9b9e7a6eb67a4e83b4147e7c1022f6e3e53f4652ea0c76117bfeb552d01f7132495b591bb36042d6ca3d87cdbad997b0d83e187adca72850b1f342df624757
 server:
     port: 8082
 

@@ -1,48 +1,78 @@
 package com.example.nextboard.controller;
 
-import com.example.nextboard.entity.Board;
-import com.example.nextboard.entity.sdo.BoardRdo;
-import com.example.nextboard.impl.BoardImpl;
+import com.example.nextboard.entity.board.Board;
+import com.example.nextboard.entity.board.sdo.BoardRdo;
+import com.example.nextboard.entity.board.sdo.BoardRequestDto;
+import com.example.nextboard.service.BoardService;
+import com.example.nextboard.service.impl.BoardImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
 
-    private BoardImpl boardImpl;
+    private final BoardService boardService;
 
-    @Autowired
-    public void setBoardImpl(BoardImpl boardImpl) {
-        this.boardImpl = boardImpl;
-    }
-
-    @PostMapping(value = "/new")
-    public void newBoard (@RequestBody Board board) {
-        log.debug("userId: " + board);
-        boardImpl.newBoard(board);
+    @PostMapping("/save-board")
+    public void saveBoardTest(@RequestPart(value="board")Board board, @RequestPart(value="file")MultipartFile file){
+        long sysTime = System.currentTimeMillis();
+        String filePath = "/Users/jameslee/IdeaProjects/files" + "/" + sysTime + "." + file.getOriginalFilename().split("\\.")[1];
+        boardService.saveFile(file, filePath);
+        boardService.newBoard(board, sysTime, file.getOriginalFilename(), filePath);
     }
 
     @PostMapping("/find-board")
     public Board boardList (@RequestBody String id) {
-        Board boardList = boardImpl.findBoardList(id);
+        Board boardList = boardService.findBoardList(id);
         return boardList;
     };
     @PostMapping("/find-all-board-list")
     public BoardRdo allBoardList () {
-        BoardRdo boardRdo = boardImpl.findAllBoard();
+        BoardRdo boardRdo = boardService.findAllBoard();
         return boardRdo;
     };
+
+    @GetMapping("/show-img/{fileName}")
+    public ResponseEntity<byte[]> showImg(@PathVariable String fileName) throws Exception {
+        FileInputStream inputStream = null;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try{
+
+            inputStream = new FileInputStream("/Users/jameslee/IdeaProjects/files" + "/" +fileName);
+        }catch (Exception e){
+            throw new Exception("problem found");
+        }
+        int readCound = 0;
+        byte[] buffer = new byte[1024];
+        byte[] fileArray = null;
+        try{
+            while((readCound = inputStream.read(buffer))!=-1){
+                outputStream.write(buffer, 0, readCound);
+            }
+            fileArray = outputStream.toByteArray();
+            inputStream.close();;
+            outputStream.close();
+        }catch (Exception e){
+            throw new Exception("problem found");
+        }
+        return new ResponseEntity<byte[]>(fileArray, HttpStatus.OK);
+    }
+
 
     @PostMapping(value = "/modify-board")
     public String modifyBoard(@RequestBody Board board){
         try{
-            boardImpl.modifyBoard(board);
+            boardService.modifyBoard(board);
             return "Success";
         }catch(Exception e){
             return "Fail";
@@ -50,9 +80,9 @@ public class BoardController {
     }
 
     @PostMapping(value = "/delete-board")
-    public String deleteBoard(@RequestBody String id){
+    public String deleteBoard(@RequestBody BoardRequestDto boardRequestDto){
         try{
-            boardImpl.deleteBoard(id);
+            boardService.deleteBoard(boardRequestDto.getId());
             return "Success";
         }catch(Exception e){
             return "Fail";

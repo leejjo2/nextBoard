@@ -1,22 +1,24 @@
 package com.example.nextboard.store.mongo;
 
-import com.example.nextboard.entity.Board;
+import com.example.nextboard.entity.board.Board;
 import com.example.nextboard.store.BoardStore;
 import com.example.nextboard.store.mongo.odm.BoardDoc;
 import com.example.nextboard.store.mongo.repository.BoardMongoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Repository
 public class BoardMongoStore implements BoardStore {
 
     private final BoardMongoRepository boardMongoRepository;
 
-    public BoardMongoStore(BoardMongoRepository boardMongoRepository) {
-        this.boardMongoRepository = boardMongoRepository;
-    }
+//    public BoardMongoStore(BoardMongoRepository boardMongoRepository) {
+//        this.boardMongoRepository = boardMongoRepository;
+//    }
 
     @Override
     public void create(Board board) {

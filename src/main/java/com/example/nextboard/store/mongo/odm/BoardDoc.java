@@ -1,6 +1,6 @@
 package com.example.nextboard.store.mongo.odm;
 
-import com.example.nextboard.entity.Board;
+import com.example.nextboard.entity.board.Board;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,11 +21,14 @@ public class BoardDoc {
     private String id;
     private String boardNo;
     private String writerId;
-    private long registerTime;
-    private long modificationTime;
+    private String writerName;
+    private String registerTime;
+    private String modificationTime;
     private String title;
     private String content;
-    private String photo;
+    private String filePath;
+    private String saveFileName;
+    private String originalFileName;
 
     public BoardDoc (Board board) {
         BeanUtils.copyProperties(board, this);
