@@ -17,4 +17,5 @@ public interface MemberStore {
     Member findByMemberId(String memberId);
     boolean existsByMemberId(String memberId);
 
+
 }

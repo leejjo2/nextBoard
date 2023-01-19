@@ -13,4 +13,5 @@ public interface BoardStore {
 
     List<Board> findAll();
     Board retrieve(String id);
+    List<Board> findAllByOrderByBoardNoDesc();
 }

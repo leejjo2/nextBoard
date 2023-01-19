@@ -19,7 +19,7 @@ public class BoardDoc {
 
     @Id
     private String id;
-    private String boardNo;
+    private int boardNo;
     private String writerId;
     private String writerName;
     private String registerTime;

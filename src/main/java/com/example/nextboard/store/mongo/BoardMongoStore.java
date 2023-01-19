@@ -60,4 +60,9 @@ public class BoardMongoStore implements BoardStore {
         Optional<BoardDoc> boardDoc = boardMongoRepository.findById(id);
         return boardDoc.map(BoardDoc::toDomain).orElse(null);
     }
+
+    @Override
+    public List<Board> findAllByOrderByBoardNoDesc() {
+        return BoardDoc.toDomains(boardMongoRepository.findAllByOrderByBoardNoDesc());
+    }
 }

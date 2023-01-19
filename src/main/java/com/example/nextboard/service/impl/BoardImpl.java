@@ -33,13 +33,25 @@ public class BoardImpl implements BoardService {
         Date date = new Date(sysTime);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         board.setId(UUID.randomUUID().toString());
+        board.setBoardNo(boardStore.findAllByOrderByBoardNoDesc().stream().findFirst().isPresent() ? boardStore.findAllByOrderByBoardNoDesc().stream().findFirst().get().getBoardNo() + 1 : 1);
         board.setWriterId(SecurityUtil.getCurrentMemberId());
         board.setWriterName(memberStore.findByMemberId(SecurityUtil.getCurrentMemberId()).getMemberName());
         board.setRegisterTime(formatter.format(date));
         board.setFilePath(filePath);
-        board.setSaveFileName(sysTime+"."+originalFileName.split("\\.")[1]);
+        board.setSaveFileName(sysTime + originalFileName.substring(originalFileName.lastIndexOf(".")));
         board.setOriginalFileName(originalFileName);
         boardStore.create(board);
+    }
+
+    @Override
+    public void editBoard(Board board, long sysTime, String originalFileName, String filePath) {
+        Date date = new Date(sysTime);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        board.setModificationTime(formatter.format(date));
+        board.setFilePath(filePath);
+        board.setSaveFileName(sysTime + originalFileName.substring(originalFileName.lastIndexOf(".")));
+        board.setOriginalFileName(originalFileName);
+        boardStore.update(board);
     }
 
     public void saveFile(MultipartFile multipartFile, String filePath) {
@@ -54,9 +66,25 @@ public class BoardImpl implements BoardService {
 
     }
 
-    public Board findBoardList(String id) {
-        Board boardList = boardStore.retrieve(id);
-        return boardList;
+    @Override
+    public void editFile(MultipartFile multipartFile, String filePath, String exFilePath) {
+        File destFile = new File(filePath);
+        File exFile = new File(exFilePath);
+        if (destFile.exists()) {
+            destFile.delete();
+        }
+        if (exFile.exists()) {
+            exFile.delete();
+        }
+        try {
+            multipartFile.transferTo(destFile);
+        } catch (Exception e) {
+        }
+    }
+
+    public Board findBoard(String id) {
+        Board board = boardStore.retrieve(id);
+        return board;
     }
 
     public BoardRdo findAllBoard() {

@@ -4,7 +4,6 @@ import com.example.nextboard.entity.board.Board;
 import com.example.nextboard.entity.board.sdo.BoardRdo;
 import com.example.nextboard.entity.board.sdo.BoardRequestDto;
 import com.example.nextboard.service.BoardService;
-import com.example.nextboard.service.impl.BoardImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,17 +23,29 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/save-board")
-    public void saveBoardTest(@RequestPart(value="board")Board board, @RequestPart(value="file")MultipartFile file){
+    public void saveBoard(@RequestPart(value="board")Board board, @RequestPart(value="file")MultipartFile file){
         long sysTime = System.currentTimeMillis();
         String filePath = "/Users/jameslee/IdeaProjects/files" + "/" + sysTime + "." + file.getOriginalFilename().split("\\.")[1];
         boardService.saveFile(file, filePath);
         boardService.newBoard(board, sysTime, file.getOriginalFilename(), filePath);
     }
 
+    @PostMapping("/edit-board")
+    public void editBoard( @RequestPart(value="board")Board board, @RequestPart(value="file")MultipartFile file){
+        long sysTime = System.currentTimeMillis();
+        Board exBoard = boardService.findBoard(board.getId());
+        exBoard.setTitle(board.getTitle());
+        exBoard.setContent(board.getContent());
+        String filePath = "/Users/jameslee/IdeaProjects/files" + "/" + sysTime + "." + file.getOriginalFilename().split("\\.")[1];
+        String exFilePath = exBoard.getFilePath();
+        boardService.editFile(file, filePath, exFilePath);
+        boardService.editBoard(exBoard, sysTime, file.getOriginalFilename(), filePath);
+    }
+
     @PostMapping("/find-board")
-    public Board boardList (@RequestBody String id) {
-        Board boardList = boardService.findBoardList(id);
-        return boardList;
+    public Board findBoard (@RequestBody BoardRequestDto boardRequestDto) {
+        Board board = boardService.findBoard(boardRequestDto.getId());
+        return board;
     };
     @PostMapping("/find-all-board-list")
     public BoardRdo allBoardList () {
@@ -47,25 +58,24 @@ public class BoardController {
         FileInputStream inputStream = null;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try{
-
             inputStream = new FileInputStream("/Users/jameslee/IdeaProjects/files" + "/" +fileName);
         }catch (Exception e){
             throw new Exception("problem found");
         }
-        int readCound = 0;
+        int readCound;
         byte[] buffer = new byte[1024];
-        byte[] fileArray = null;
+        byte[] fileArray;
         try{
             while((readCound = inputStream.read(buffer))!=-1){
                 outputStream.write(buffer, 0, readCound);
             }
             fileArray = outputStream.toByteArray();
-            inputStream.close();;
+            inputStream.close();
             outputStream.close();
         }catch (Exception e){
             throw new Exception("problem found");
         }
-        return new ResponseEntity<byte[]>(fileArray, HttpStatus.OK);
+        return new ResponseEntity<>(fileArray, HttpStatus.OK);
     }
 
 
