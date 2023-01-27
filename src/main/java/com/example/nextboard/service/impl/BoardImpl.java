@@ -44,13 +44,17 @@ public class BoardImpl implements BoardService {
     }
 
     @Override
-    public void editBoard(Board board, long sysTime, String originalFileName, String filePath) {
+    public void editBoard(Board board, long sysTime, MultipartFile file) {
         Date date = new Date(sysTime);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         board.setModificationTime(formatter.format(date));
-        board.setFilePath(filePath);
-        board.setSaveFileName(sysTime + originalFileName.substring(originalFileName.lastIndexOf(".")));
-        board.setOriginalFileName(originalFileName);
+        if(file != null){
+            String filePath = "/Users/jameslee/IdeaProjects/files" + "/" + sysTime + "." + file.getOriginalFilename().split("\\.")[1];
+            String originalFileName = file.getOriginalFilename();
+            board.setFilePath(filePath);
+            board.setSaveFileName(sysTime + originalFileName.substring(originalFileName.lastIndexOf(".")));
+            board.setOriginalFileName(originalFileName);
+        }
         boardStore.update(board);
     }
 
@@ -67,7 +71,13 @@ public class BoardImpl implements BoardService {
     }
 
     @Override
-    public void editFile(MultipartFile multipartFile, String filePath, String exFilePath) {
+    public void editFile(MultipartFile file, String exFilePath, long sysTime) {
+        if(file == null){
+            return;
+        }
+
+        String filePath = "/Users/jameslee/IdeaProjects/files" + "/" + sysTime + "." + file.getOriginalFilename().split("\\.")[1];
+
         File destFile = new File(filePath);
         File exFile = new File(exFilePath);
         if (destFile.exists()) {
@@ -77,7 +87,7 @@ public class BoardImpl implements BoardService {
             exFile.delete();
         }
         try {
-            multipartFile.transferTo(destFile);
+            file.transferTo(destFile);
         } catch (Exception e) {
         }
     }
