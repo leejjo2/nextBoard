@@ -1,4 +1,4 @@
-package com.example.nextboard.entity.board.sdo;
+package com.example.nextboard.entity.boardReply.board.sdo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BoardRequestDto {
+public class BoardReplyRequestDto {
     private String id;
-    private String boardId;
+    private String boardNo;
     private String writerId;
     private String writerName;
-    private int depth;
-    private String parentId;
+    private String title;
     private String content;
 }

@@ -47,8 +47,6 @@ public class BoardController {
         return board;
     }
 
-    ;
-
     @PostMapping("/find-all-board-list")
     public BoardRdo allBoardList() {
         BoardRdo boardRdo = boardService.findAllBoard();

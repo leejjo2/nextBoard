@@ -40,7 +40,6 @@ public class AuthImpl implements AuthService {
         Date date = new Date(sysTime);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         member.setId(UUID.randomUUID().toString());
-        member.setAuthority(Authority.ROLE_USER);
         member.setRegisterTime(formatter.format(date));
         return MemberResponseDto.of(memberStore.create(member));
     }
