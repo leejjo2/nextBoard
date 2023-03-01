@@ -44,7 +44,7 @@ public class WebSecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/**","/board/find-all-board-list", "/board/show-img/**", "/boardReply/**").permitAll()
+                .antMatchers("/auth/**","/board/find-all-board-list", "/board/show-img/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

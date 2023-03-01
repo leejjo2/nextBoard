@@ -21,11 +21,4 @@ public class BoardReply {
     private String modificationTime;
     private String modified;
     private String content;
-
-//    public static Board sample () {
-//        return new Board("","1", "id", "", "", "title", "content");
-//    }
-//
-//    public static void main (String[] args) { System.out.println(sample().toString());}
-
 }
